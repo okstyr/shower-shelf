@@ -55,18 +55,22 @@ module create_hexgrid(w, h) {
     startx  = cell_wall;
     starty  = cell_wall;
 
+    col_step   = cell_wall + (radius * 2) - (radius / 2);
+    row_step   = cell_wall + (hex_apothem * 2);
+    odd_offset = -(hex_apothem + (cell_wall / 2));
+
     color("maroon") translate([0, 0, 0])
         linear_extrude(height = wall_thickness)
         difference()
         {
             square([w, h]);
             translate([startx, starty, 0]) for (row = [0:1:rows]) for (column = [0:1:columns]) translate([
-                    ((cell_wall + (radius * 2) - (radius / 2)) * row),
-                    ((is_odd(row) ? -(hex_apothem + (cell_wall / 2)) : 0)) +
-                    (((cell_wall) + (hex_apothem * 2)) * column),
+                    col_step * row,
+                    (is_odd(row) ? odd_offset : 0) + (row_step * column),
                     0
             ]) circle(r = radius, $fn = 6);
         }
+    // solid border strips to close panel edges
     color("maroon")
     {
         linear_extrude(height = wall_thickness)
