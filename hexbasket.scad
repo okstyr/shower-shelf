@@ -124,7 +124,7 @@ module hexgrid_box(width, depth, height) {
         hexgrid_panel(width, height, XZ);
 
     // Left panel (YZ plane)
-    translate([3, 0, height])
+    translate([cell_wall, 0, height])
         hexgrid_panel(height, depth, YZ);
 
     // Right panel (YZ plane)
