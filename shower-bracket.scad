@@ -48,6 +48,38 @@ NEG_X = -1;
 POS_Y = 1;
 NEG_Y = -1;
 
+module dowell_rectangle(left, top, right, bottom) {
+    polygon([[left, top], [right, top], [right, bottom], [left, bottom]]);
+}
+
+module dowell_pad() {
+    radius = dowell_hook_diameter / 2;
+    fudge_factor = -0.5;
+    translate([dowell_hook_diameter + bracket_width + dowell_hook_pad[0], dowell_hook_descent, 0])
+        dowell_rectangle(
+            left   = -radius,
+            top    = -dowell_hook_pad[1] / 2,
+            right  = -(radius + dowell_hook_pad[0] + dowell_hook_thickness + fudge_factor),
+            bottom = dowell_hook_pad[1] / 2
+        );
+}
+
+module dowell_hook_circle() {
+    radius = dowell_hook_diameter / 2;
+    ring_outer_d = dowell_hook_diameter + (2 * dowell_hook_thickness);
+    translate([dowell_hook_diameter + bracket_width + dowell_hook_pad[0], dowell_hook_descent, 0])
+        difference() {
+            circle(d = ring_outer_d);
+            circle(d = dowell_hook_diameter);
+            polygon([
+                [0, 0],
+                [-radius * 1.2, -(radius + dowell_hook_thickness)],
+                [radius + dowell_hook_thickness, -(radius + dowell_hook_thickness)],
+                [radius + dowell_hook_thickness, 0]
+            ]);
+        }
+}
+
 module bracket () {
     module registration (origin, opposite, adjacent) {
         // draws a right angle triangle at origin with sides of length opposite
@@ -99,46 +131,8 @@ module bracket () {
     }
 
     module dowell_hook() {
-        module make_rectangle(left, top, right, bottom){
-            polygon([[left,top], [right, top], [right, bottom], [left,bottom]]);
-        };
-        module make_pad(){
-            radius=dowell_hook_diameter/2;
-            // just calling this what it is - a sign of bad maths somewhere
-            // it means i cant do something nice like curve the sides of the pad
-            // till i work it out.  Note the bigger the hook diameter gets the
-            // more this varies to the negative, the smaller, the more positive
-            // its not float probs. its my maths
-            fudge_factor = -0.5;
-            translate([dowell_hook_diameter+bracket_width+dowell_hook_pad[0],dowell_hook_descent,0]) // same as hook so it can be embedded later
-
-                make_rectangle(
-                        left=-radius,
-                        top=-dowell_hook_pad[1]/2,
-                        right=-(radius+dowell_hook_pad[0]+dowell_hook_thickness+fudge_factor),
-                        bottom=dowell_hook_pad[1]/2
-                        );
-        }
-
-        module make_hook() {
-            radius=dowell_hook_diameter/2;
-            translate([dowell_hook_diameter+bracket_width+dowell_hook_pad[0],dowell_hook_descent,0])
-
-                difference(){
-                    circle(d=dowell_hook_diameter+(2*dowell_hook_thickness));
-                    circle(d=dowell_hook_diameter);
-
-                    polygon([
-                            [0,0],
-                            [-radius*1.2,-(radius+dowell_hook_thickness)],
-                            [radius+dowell_hook_thickness,-(radius+dowell_hook_thickness)],
-                            [radius+dowell_hook_thickness,0]
-                    ]);
-                }
-        }
-
-        make_hook();
-        make_pad();
+        dowell_hook_circle();
+        dowell_pad();
     }
 
     linear_extrude(height = bracket_width) {
