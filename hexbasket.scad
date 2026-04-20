@@ -46,61 +46,48 @@ function is_odd(x) = x % 2; // naming function to make purpose more apparent
 // remember centre of circle is at the coords
 
 
+module create_hexgrid(w, h) {
+    hex_apothem = sqrt((radius ^ 2) - ((radius / 2) ^ 2));
+    // distance from hex centre to the midpoint of a side
+
+    rows    = floor(w / (radius + cell_wall)) + 3;
+    columns = floor(h / (radius + cell_wall)) + 3;
+    startx  = cell_wall;
+    starty  = cell_wall;
+
+    color("maroon") translate([0, 0, 0])
+        linear_extrude(height = wall_thickness)
+        difference()
+        {
+            square([w, h]);
+            translate([startx, starty, 0]) for (row = [0:1:rows]) for (column = [0:1:columns]) translate([
+                    ((cell_wall + (radius * 2) - (radius / 2)) * row),
+                    ((is_odd(row) ? -(hex_apothem + (cell_wall / 2)) : 0)) +
+                    (((cell_wall) + (hex_apothem * 2)) * column),
+                    0
+            ]) circle(r = radius, $fn = 6);
+        }
+    color("maroon")
+    {
+        linear_extrude(height = wall_thickness)
+        {
+            square([w, cell_wall]);
+            square([cell_wall, h]);
+            translate([0, h - cell_wall, 0]) square([w, cell_wall]);
+            translate([w - cell_wall, 0, 0]) square([cell_wall, h]);
+        }
+    }
+}
+
 module hexgrid_panel(width, height, plane_select = XY) {
-    // the real work of hexgrid panel is actually done in create_hexgrid, this section
-    // just to calculate a few values we need, and importantly,  rotate the plane so that // create_hexgrid can work with an 'internal' xy coordinate space without needing to
-    // think about 3 dimensions
-
-    short_radius = (sqrt((radius ^ 2) - ((radius / 2) ^ 2)));
-    // the distance from the centre of the hex to the middle of one side
-
-    rows = floor(width / (radius + cell_wall)) + 3;    // x
-    columns = floor(height / (radius + cell_wall)) + 3; // y
-                                                        // start<blah>: give us cell_wall worth of space around the edge
-                                                        // i just used these so that i could easily change these to a different
-                                                        // value if i wanted later
-    startx = cell_wall;
-    starty = cell_wall;
-
-    // Apply rotation based on plane selection
-    if (plane_select == XZ) {       // XZ plane
+    if (plane_select == XZ) {
         rotate([90, 0, 0])
             create_hexgrid(width, height);
-    } else if (plane_select == YZ) { // YZ plane
+    } else if (plane_select == YZ) {
         rotate([270, 0, 90])
-        //rotate([90, 0, 0])
-            create_hexgrid(height,width);
-    } else {                       // XY plane (default)
+            create_hexgrid(height, width);
+    } else {
         create_hexgrid(width, height);
-    }
-
-    module create_hexgrid(w, h) {
-        color("maroon") translate([0, 0, 0])
-            linear_extrude(height = wall_thickness)
-            // the cell_wall shall be square in cross-section
-            // in these for loops, the apparent off-by-one is a feature not a bug
-            // we want the hexes to 'go over' so when we do a border it will
-            // be hexes all the way to the edge
-            difference()
-            {
-                square([w, h]);
-                translate([startx, starty, 0]) for (row = [0:1:rows]) for (column = [0:1:columns]) translate([
-                        ((cell_wall + (radius * 2) - (radius / 2)) * row), // x
-                        ((is_odd(row) ? -(short_radius + (cell_wall / 2)) : 0)) +
-                        (((cell_wall) + (short_radius * 2)) * column), // y
-                        0
-                ]) circle(r = radius, $fn = 6);
-            }
-        color("maroon")
-        {
-            linear_extrude(height = wall_thickness)
-            {
-                square([w, cell_wall]);
-                square([cell_wall, h]);
-                translate([0, h - cell_wall, 0]) square([w, cell_wall]);
-                translate([w - cell_wall, 0, 0]) square([cell_wall, h]);
-            }
-        }
     }
 }
 
