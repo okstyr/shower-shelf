@@ -14,7 +14,11 @@ bracket_width = 8;
 bracket_internal_descent = 100;  // should be 60 in and 50 out
 bracket_external_descent = 100;
 
-dowell_hook_descent = bracket_external_descent - 8 ; // how far down is the centre
+total_width = frame_width + (2 * bracket_thickness);
+
+dowell_hook_clearance = 8; // gap (mm) between top of dowell hook centre and bracket_external_descent
+
+dowell_hook_descent = bracket_external_descent - dowell_hook_clearance; // how far down is the centre
 dowell_hook_pad = [24,14];  // padding between the bracket and the hook. its a rectangle of [x,y]
 dowell_hook_thickness = 3;
 dowell_hook_diameter = 17; // the centre of the circle will be .5 * diameter from the outside edge of the pad
@@ -140,7 +144,7 @@ module bracket () {
     linear_extrude(height = bracket_width) {
 
         //top
-        square([ frame_width+(2 * bracket_thickness), bracket_thickness], center = false);
+        square([ total_width, bracket_thickness], center = false);
         //insid
         square([ bracket_thickness, bracket_internal_descent+bracket_thickness], center=false);
         //outside
@@ -159,10 +163,10 @@ module bracket () {
             registration([0,reg,0], -bracket_thickness, bracket_thickness);
         }
         for(reg=registration_external) {
-            registration([frame_width+(2*bracket_thickness),registration_external,0], bracket_thickness, bracket_thickness);
+            registration([total_width,registration_external,0], bracket_thickness, bracket_thickness);
         }
         attachment_hook([0,attachment_hook_internal,0],bracket_thickness, -(bracket_thickness*2), (bracket_thickness*2),NEG_X, POS_Y);
-        attachment_hook([frame_width+(2*bracket_thickness),attachment_hook_external,0],bracket_thickness, -(bracket_thickness*2), (bracket_thickness*2),POS_X, POS_Y);
+        attachment_hook([total_width,attachment_hook_external,0],bracket_thickness, -(bracket_thickness*2), (bracket_thickness*2),POS_X, POS_Y);
         dowell_hook();
     }
 }
