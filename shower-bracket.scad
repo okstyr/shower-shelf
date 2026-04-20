@@ -44,7 +44,7 @@ NEG_X = -1;
 POS_Y = 1;
 NEG_Y = -1;
 
-module square_based () {
+module bracket () {
     module registration (origin, opposite, adjacent) {
         // draws a right angle triangle at origin with sides of length opposite
         // and adjacent.
@@ -168,5 +168,4 @@ module square_based () {
 }
 
 
-square_based();
-//poly_based();
+bracket();
