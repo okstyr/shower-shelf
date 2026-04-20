@@ -153,12 +153,13 @@ module bracket () {
             polygon([[0,0],[-frame_lip,bracket_thickness],[-frame_lip,bracket_external_descent-frame_height-bracket_thickness],[0,bracket_external_descent-frame_height]]);
 
         // registration
-        for(reg=registration_internal) {
-            registration([0,reg,0], -bracket_thickness, bracket_thickness);
-        }
-        for(reg=registration_external) {
-            registration([total_width,registration_external,0], bracket_thickness, bracket_thickness);
-        }
+        if (registration_internal != undef)
+            for (reg = registration_internal)
+                registration([0, reg, 0], -bracket_thickness, bracket_thickness);
+
+        if (registration_external != undef)
+            for (reg = registration_external)
+                registration([total_width, reg, 0], bracket_thickness, bracket_thickness);
         attachment_hook([0,attachment_hook_internal,0],bracket_thickness, -(bracket_thickness*2), (bracket_thickness*2),NEG_X, POS_Y);
         attachment_hook([total_width,attachment_hook_external,0],bracket_thickness, -(bracket_thickness*2), (bracket_thickness*2),POS_X, POS_Y);
         dowell_hook();
