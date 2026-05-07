@@ -2,45 +2,73 @@
 // brackets to mount 'hexbox' over top of shower wall
 // all measures are in mm
 
-frame_width = 13;  // how wide the frame is accross the top
-frame_height = 27; // how long the frame is where it covers the glass
-                   // should include the silicone bead
-frame_lip = 3;  // the distance between the glass and the outside of the frame
-                // this will make the ends of the bracket this much thicker
-                // set to 0 to ignore
+/* [shower glass frame parameters] */
 
+
+// how wide the frame of the shower glass is across the top (mm - like all other measurements)
+frame_width = 13;
+// how long the frame is where it covers the glass (should include the silicone bead)
+frame_height = 27;
+// if frame_lip is non zero the hook will clip over the frame and sit snugly against the glass
+// the distance between the glass and the outside of the frame - set to 0 to ignore
+frame_lip = 3;
+
+/* [bracket dimensions] */
+
+// how thick the bracket is where it touches the frame
 bracket_thickness = 3;
+// how wice the bracket is
 bracket_width = 8;
-bracket_internal_descent = 100;  // should be 60 in and 50 out
+// how far the bracket descends on the inside of the shower glass
+bracket_internal_descent = 100;
+// how far the bracket descends on the outside of the shower glass
 bracket_external_descent = 100;
 
 total_width = frame_width + (2 * bracket_thickness);
 
-dowell_hook_clearance = 8; // gap (mm) between top of dowell hook centre and bracket_external_descent
+
+/* [hook for a dowell] */
+
+// how far above the bottom of the bracket_external_descent should the centre of the hook sit
+dowell_hook_clearance = 8; 
 
 dowell_hook_descent = bracket_external_descent - dowell_hook_clearance; // how far down is the centre
-dowell_hook_pad = [24,14];  // padding between the bracket and the hook. its a rectangle of [x,y]
+
+
+// padding between the bracket and the hook. its a rectangle of [x,y]
+dowell_hook_pad = [24,14];
+// thickness of the hook
 dowell_hook_thickness = 3;
+// diameter of hook
 dowell_hook_diameter = 17; // the centre of the circle will be .5 * diameter from the outside edge of the pad
+// how much extra hook to build, to grip the dowell (degrees)
 dowell_hook_extra_degrees = 5;
 
-// registration-* > 0 makes a trianguler outdent to assist with lining up the basket (hexbox)
+/* [attachments for hexbox] */
 
+// instead of registering and gluing, how about some hooks?
+// you probably want these set to undef if you are using registrations
+//
+// the distance down from the top of the bracket to the top of the internal hook
+attachment_hook_internal = 36 ;
+// the distance down from the top of the bracket to the top of the external hook
+attachment_hook_external = 13;
+
+// this is unused, if you would rather glue than use little hooks, edit registration_* in the code to make registration marks to assist with gluing. also remember you might want to set attachment hook to undef
+registration_marks=0;
+
+/* [Hidden] */
+
+// registration-* > 0 makes a trianguler outdent to assist with lining up the basket for possible gluing
 // registration-* are distances from the top of the frame, not the bracket
-// they can be a scalar or a list. set to undef if you dont want any
-//registration_internal = [9,15];  // should be about 25
-//registration_external = 11;
+// they can be a scalar or a list (for more than one registration). set to undef if you dont want any
+// registration_internal = [9,15];  // should be about 25
+// registration_external = 11;
+
 registration_internal=undef;
 registration_external=undef;
 
-// instead of registering and gluing, how about a couple of hooks
-// attachment top and bottom form two hooks where the bottom of att-top and
-// the top of att-bottom is this far from the top of the bracket.  ie the difference between them should be the height of your basket
-attachment_hook_internal = 36 ;
-attachment_hook_external = 13;
 
-//attachment_bottom_internal = 18 ;
-//attachment_bottom_external = 18;
 
 //constants for x and y directions
 POS_X = 1;

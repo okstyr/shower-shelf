@@ -25,15 +25,26 @@
 // glasses tray 160 x 90 x 30
 // bottles tray 130 x 90 x 90
 
-// Box dimensions (in mm)
+// Box dimensions (in mm)A
+
+// width of box (mm - as are all other measurements)
 box_width = 140;
+// depth of box
 box_depth = 90;
+// height of box
 box_height = 90;
 
 // Hexgrid parameters
-cell_wall = 3;     // Space between hexes
-radius = 8;        // Distance from centre of hex to an apex
-wall_thickness = cell_wall; // Thickness of the walls
+
+// thickness of material between hexes
+cell_wall = 3;
+// Distance from centre of hex to an apex
+radius = 8;
+
+/* [Hidden] */
+
+// thickness of other walls (eg rectangular frame around each panel)
+wall_thickness = cell_wall;
 
 // plane selection constants
 XY = 0; //not really needed, but makes the code look nicer
@@ -41,10 +52,6 @@ XZ = 1;
 YZ = 2;
 
 function is_odd(x) = x % 2; // naming function to make purpose more apparent
-
-// hex grid
-// remember centre of circle is at the coords
-
 
 module create_hexgrid(w, h) {
     hex_apothem = sqrt((radius ^ 2) - ((radius / 2) ^ 2));
